@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width = device-width, initial-scale = 1.0">
+        <meta name="description" content="Created By Tarun Tilwani">
+        <link rel="stylesheet" href="styles.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=SUSE:wght@100..800&display=swap" rel="stylesheet">
+        <title>Cash Register</title>
+    </head>
+    <body>
+        <header>
+            <h1>Cash Register</h1>
+        </header>
+        <main>
+            <div id="cash-reg">
+                <div id="c-s-bezel">
+                    <div id="screen">
+                        <div id="numbers">
+                            <div id="total-box"><h3>Total: $<span id="total"></span</h3></div>
+                            <div class="numbers">1</div>
+                            <div class="numbers">2</div>
+                            <div class="numbers">3</div>
+                            <div class="numbers">4</div>
+                            <div class="numbers">5</div>
+                            <div class="numbers">6</div>
+                            <div class="numbers">7</div>
+                            <div class="numbers">8</div>
+                            <div class="numbers">9</div>
+                            <div class="numbers">0</div>
+                        </div>
+                        <div id="change-container">
+                            <div id="change-due">
+                                <!--<p class="drawer-change">Pennies:<span>$1.01</span</p>-->
+                            </div>
+                            
+                            <div id="change-in-drawer-container">
+                                <h3>Change in drawer:</h3>
+                                <p class="drawer-change">Pennies: <span id="penny" class="change-span">$1.01</span</p>
+                                <p class="drawer-change">Nickels: <span id="nickel" class="change-span">$2.05</span></p>
+                                <p class="drawer-change">Dimes: <span id="dime" class="change-span">$3.10</span></p>
+                                <p class="drawer-change">Quarters: <span id="quarter" class="change-span">$4.25</span></p>
+                                <p class="drawer-change">Ones: <span id="one" class="change-span">$90</span></p>
+                                <p class="drawer-change">Fives: <span id="five" class="change-span">$55</span></p>
+                                <p class="drawer-change">Tens: <span id="ten" class="change-span">$20</span></p>
+                                <p class="drawer-change">Twenties: <span id="twenty" class="change-span">$60</span></p>
+                                <p class="drawer-change">Hundreds: <span id="one-hundred" class="change-span">$100</span></p>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div id="stem"></div>
+                <div id="bottom-box">
+                    <div id="cash-opening-line">
+                        <div id="lock">
+                            <div id="lock-hole"></div>
+                            <div id="lock-rect"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="feet" id="feet-1"></div>
+                <div class="feet" id="feet-2"></div>
+            </div>
+            <div id="input-section">
+                <form>
+                    <label for="cash">Enter cash from customer</label>
+                    <input type="number" id="cash" name="cash" autocomplete="off">
+                    <button type="button" id="purchase-btn">Purchase</button>
+                </form>
+            </div>
+            <script src="script.js"></script>
+        </main>
+    </body>
+</html>
