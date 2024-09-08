@@ -9,15 +9,15 @@ const drawerChangeSpan = document.querySelectorAll(".change-span")
 const statusText = document.getElementById("status");
 const totalSpan = document.getElementById("total");
 
-let price = 3.26;
+let price = 1.75;
 
-
+let isDrawerClosed = false
 
 const changeDue = () => (Number(cashInput.value) - price.toFixed(2));
 
 totalSpan.innerText = price;
 
-let cid = [
+  let cid = [
   ['PENNY', 1.01],
   ['NICKEL', 2.05],
   ['DIME', 3.1],
@@ -28,6 +28,15 @@ let cid = [
   ['TWENTY', 60],
   ['ONE HUNDRED', 100]
 ];
+
+/* let cid = [
+  ["PENNY", 0.5], ["NICKEL", 0], ["DIME", 0], ["QUARTER", 0], ["ONE", 0], ["FIVE", 0], ["TEN", 0], ["TWENTY", 0], ["ONE HUNDRED", 0]
+]; */
+
+
+ /* let cid = [
+  ["PENNY", 0.01], ["NICKEL", 0], ["DIME", 0], ["QUARTER", 0], ["ONE", 1], ["FIVE", 0], ["TEN", 0], ["TWENTY", 0], ["ONE HUNDRED", 0]
+];   */
 
 const currency =[
   ['PENNY', 0.01],
@@ -46,14 +55,22 @@ const currencyCalc = (amount) => Math.round(amount * 100) / 100;
 const updateCid = (cidCountArray) => cid.forEach((el, index) => el[1] = parseFloat((cidCountArray[index][3] * currency[index][1]).toFixed(2)));
 
 const updateDrawerChangeSpan = () => drawerChangeSpan.forEach((el, index) => el.innerText = `$${cid[index][1]}`)
+updateDrawerChangeSpan()
+
 
 const updateChangeGiven = (changeGivenArray) => {
   const changeDueVal = [];
+  const changeTotal = []
+  changeGivenArray.sort((a, b) => b[1] - a[1])
   changeGivenArray.forEach((el) => {
     //changeDueContainer.innerHTML += `<p class="drawer-change">${el[0]}:<span>$${el[1]}</span></p>`
     changeDueVal.push(`${el[0]}: $${el[1]}`)
+    changeTotal.push(el[1]);
   })
-  changeDueContainer.innerHTML = `<p class="drawer-change">Status: OPEN ${changeDueVal.join(" ")}</p>`
+  
+  const status = changeInDrawerTotal() === changeTotal ? "CLOSED" : "OPEN";
+  changeDueContainer.innerHTML = `<p class="drawer-change">Status: ${status} ${changeDueVal.join(" ")}</p>`;
+  isDrawerClosed = status === "CLOSED";
 }
 
 const changeInDrawerTotal = () => {
@@ -72,7 +89,10 @@ const statusCheck = () => {
       const changeDueAmount = changeDue();
       const status = changeDueAmount > changeInDrawerTotal() ? "INSUFFICIENT_FUNDS" : changeDueAmount === 0 ? "CLOSED" : "OPEN";
       status === "CLOSED" && (changeDueContainer.innerHTML += "No change due - customer paid with exact cash");
-      (status === "INSUFFICIENT_FUNDS" || status === "OPEN") && (changeDueContainer.innerHTML += `<h3 id="status">Status: ${status}</h3>`);
+      
+     status === "INSUFFICIENT_FUNDS"  && (changeDueContainer.innerHTML = `<p class="drawerChange">Status: INSUFFICIENT_FUNDS</p>`)
+
+      //(status === "INSUFFICIENT_FUNDS" || status === "OPEN") && (changeDueContainer.innerHTML = `<h3 id="status">Status: ${status}</h3>`);
 
       return status === "OPEN";
   } 
@@ -121,9 +141,8 @@ const changeCalc = () => {
   })
   
   if (parseFloat(changeD.toFixed(2)) > 0) {
-    changeDueContainer.innerHTML = "";
-    changeDueContainer.innerHTML += `
-    <h3 id="status">Status: INSUFFICIENT_FUNDS</h3>`;
+    changeDueContainer.innerHTML = `
+    <p class="drawerChange">Status: INSUFFICIENT_FUNDS</p>`;
     return false;
   }else{
     updateCid(tempCidCountArray.reverse())
@@ -136,10 +155,10 @@ const cleaner = () => {
   changeDueContainer.innerHTML = ""
 }
 const checker = () => {
+  if(isDrawerClosed) return
   cleaner()
   statusCheck() === true && changeCalc();
 }
 
 
 purchaseBtn.addEventListener("click", () => checker())
-
