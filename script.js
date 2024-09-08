@@ -9,7 +9,7 @@ const drawerChangeSpan = document.querySelectorAll(".change-span")
 const statusText = document.getElementById("status");
 const totalSpan = document.getElementById("total");
 
-let price = 1.87;
+let price = 3.26;
 
 
 
@@ -48,9 +48,12 @@ const updateCid = (cidCountArray) => cid.forEach((el, index) => el[1] = parseFlo
 const updateDrawerChangeSpan = () => drawerChangeSpan.forEach((el, index) => el.innerText = `$${cid[index][1]}`)
 
 const updateChangeGiven = (changeGivenArray) => {
+  const changeDueVal = [];
   changeGivenArray.forEach((el) => {
-    changeDueContainer.innerHTML += `<p class="drawer-change">${el[0]}:<span>$${el[1]}</span></p>`
+    //changeDueContainer.innerHTML += `<p class="drawer-change">${el[0]}:<span>$${el[1]}</span></p>`
+    changeDueVal.push(`${el[0]}: $${el[1]}`)
   })
+  changeDueContainer.innerHTML = `<p class="drawer-change">Status: OPEN ${changeDueVal.join(" ")}</p>`
 }
 
 const changeInDrawerTotal = () => {
@@ -61,25 +64,29 @@ const changeInDrawerTotal = () => {
 
 
 const statusCheck = () => {
-
-  if(cashInput.value < price) {
+  const cashInputNo = Number(cashInput.value);
+  if(cashInputNo < price) {
     alert("Customer does not have enough money to purchase the item")
     return false
   }else{
-      const ChangeDueAmount = changeDue();
-      const status = ChangeDueAmount > changeInDrawerTotal() ? "INSUFFICIENT_FUNDS" : ChangeDueAmount === 0 ? "CLOSED" : "OPEN";
-      changeDueContainer.innerHTML += `<h3 id="status">Status: ${status}</h3>`
-
-      const changeDueMessages = {
-        INSUFFICIENT_FUNDS: "",
-        CLOSED: "No change due - customer paid with exact cash",
-        OPEN: ""
-      };
-
-      (status === "CLOSED" || status === "OPEN") && (changeDueContainer.innerHTML += changeDueMessages[status]);
+      const changeDueAmount = changeDue();
+      const status = changeDueAmount > changeInDrawerTotal() ? "INSUFFICIENT_FUNDS" : changeDueAmount === 0 ? "CLOSED" : "OPEN";
+      status === "CLOSED" && (changeDueContainer.innerHTML += "No change due - customer paid with exact cash");
+      (status === "INSUFFICIENT_FUNDS" || status === "OPEN") && (changeDueContainer.innerHTML += `<h3 id="status">Status: ${status}</h3>`);
 
       return status === "OPEN";
-  }
+  } 
+
+   /* else if(cashInputNo === price){
+    changeDueContainer.innerHTML += `
+    <h3 id="status">Status: CLOSED</h3>
+    <p class="drawer-change">No change due - customer paid with exact cash</p>`
+  }else if(changeDueAmount > changeInDrawerTotal()){
+    changeDueContainer.innerHTML += `<h3 id="status">Status: INSUFFICIENT_FUNDS</h3>`
+  }else if(changeDueAmount !== 0){
+    changeDueContainer.innerHTML += `<h3 id="status">Status: OPEN</h3>`
+    return true
+  }    */
 };
 
 const cidCount = () => {
@@ -116,17 +123,13 @@ const changeCalc = () => {
   if (parseFloat(changeD.toFixed(2)) > 0) {
     changeDueContainer.innerHTML = "";
     changeDueContainer.innerHTML += `
-    <h3 id="status">Status: INSUFFICIENT_FUNDS</h3>
-    <p>Insufficient funds in drawer</p>`;
+    <h3 id="status">Status: INSUFFICIENT_FUNDS</h3>`;
     return false;
   }else{
     updateCid(tempCidCountArray.reverse())
     updateDrawerChangeSpan()
     updateChangeGiven(changeGiven)
   }
-    console.log(changeD)
-    console.log(tempCidCountArray)
-    console.log(changeGiven)
 }
 
 const cleaner = () => {
@@ -139,6 +142,4 @@ const checker = () => {
 
 
 purchaseBtn.addEventListener("click", () => checker())
-
-
 
