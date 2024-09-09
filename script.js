@@ -71,6 +71,7 @@ const updateChangeGiven = (changeGivenArray) => {
   const status = changeInDrawerTotal() === changeTotal ? "CLOSED" : "OPEN";
   changeDueContainer.innerHTML = `<p class="drawer-change">Status: ${status} ${changeDueVal.join(" ")}</p>`;
   isDrawerClosed = status === "CLOSED";
+  
 }
 
 const changeInDrawerTotal = () => {
@@ -85,17 +86,18 @@ const statusCheck = () => {
   if(cashInputNo < price) {
     alert("Customer does not have enough money to purchase the item")
     return false
-  }else{
-      const changeDueAmount = changeDue();
-      const status = changeDueAmount > changeInDrawerTotal() ? "INSUFFICIENT_FUNDS" : changeDueAmount === 0 ? "CLOSED" : "OPEN";
-      status === "CLOSED" && (changeDueContainer.innerHTML += "No change due - customer paid with exact cash");
+  }
+  //price < cashInput.value  but denomination makes impossible to return insufficient funds
+  
+  const status = changeDue() > changeInDrawerTotal() ? "INSUFFICIENT_FUNDS" : changeDue() === 0 ? "CLOSED" : "OPEN";
+  status === "CLOSED" && (changeDueContainer.innerHTML += "No change due - customer paid with exact cash");
       
-     status === "INSUFFICIENT_FUNDS"  && (changeDueContainer.innerHTML = `<p class="drawerChange">Status: INSUFFICIENT_FUNDS</p>`)
+  status === "INSUFFICIENT_FUNDS"  && (changeDueContainer.innerHTML = `<p class="drawerChange">Status: INSUFFICIENT_FUNDS</p>`)
 
       //(status === "INSUFFICIENT_FUNDS" || status === "OPEN") && (changeDueContainer.innerHTML = `<h3 id="status">Status: ${status}</h3>`);
 
-      return status === "OPEN";
-  } 
+  return status === "OPEN";
+  
 
    /* else if(cashInputNo === price){
     changeDueContainer.innerHTML += `
@@ -124,9 +126,12 @@ const changeCalc = () => {
   let tempCidCountArray = [...cidCountArray].reverse()
   // ["text", currency, available, count]
   let changeGiven = [];
-
+  /* if(price < Number(cashInput.value) && changeInDrawerTotal < changeD){
+    
+  }  */
 
   tempCidCountArray.forEach((el) => {
+
     let amountGiven = 0;
     while(changeD >= el[1] && el[3] > 0){
       changeD = currencyCalc(changeD - el[1]);
@@ -140,7 +145,9 @@ const changeCalc = () => {
     }
   })
   
-  if (parseFloat(changeD.toFixed(2)) > 0) {
+  
+
+  if (parseFloat(changeD.toFixed(2)) > 0 ) {
     changeDueContainer.innerHTML = `
     <p class="drawerChange">Status: INSUFFICIENT_FUNDS</p>`;
     return false;
@@ -149,6 +156,8 @@ const changeCalc = () => {
     updateDrawerChangeSpan()
     updateChangeGiven(changeGiven)
   }
+
+
 }
 
 const cleaner = () => {
@@ -162,3 +171,5 @@ const checker = () => {
 
 
 purchaseBtn.addEventListener("click", () => checker())
+
+//when the last amount of change is used make sure status turns to closed joined with the last amount of change
